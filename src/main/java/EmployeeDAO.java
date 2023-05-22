@@ -16,14 +16,14 @@ public class EmployeeDAO {
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
-                int id = resultSet.getInt("ID");
+                int id = resultSet.getInt("EmployeeID");
                 String firstName = resultSet.getString("FirstName");
                 String lastName = resultSet.getString("LastName");
                 String email = resultSet.getString("Email");
                 String phoneNumber = resultSet.getString("PhoneNumber");
                 LocalDate hireDate = resultSet.getDate("HireDate").toLocalDate();
                 String jobTitle = resultSet.getString("JobTitle");
-                int departmentId = resultSet.getInt("Department");
+                int departmentId = resultSet.getInt("DepartmentID");
                 Employee employee = new Employee(id, firstName, lastName, email, phoneNumber, hireDate, jobTitle, departmentId);
                 employees.add(employee);
             }
@@ -46,7 +46,7 @@ public class EmployeeDAO {
     }
 
     public void updateEmployee(Employee employee) throws SQLException {
-        String sql = "UPDATE Employees SET FirstName = ?, LastName = ?, Email = ?, PhoneNumber = ?, HireDate = ?, JobTitle = ?, Department = ? WHERE ID = ?";
+        String sql = "UPDATE Employees SET FirstName = ?, LastName = ?, Email = ?, PhoneNumber = ?, HireDate = ?, JobTitle = ?, DepartmentID = ?  WHERE EmployeeID = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, employee.getFirstName());
             statement.setString(2, employee.getLastName());

@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 public class Employee {
-    private int id;
+    private int employeeid;
     private String firstName;
     private String lastName;
     private String email;
@@ -9,8 +9,8 @@ public class Employee {
     private String jobTitle;
     private int departmentId;
 
-    public Employee(int id, String firstName, String lastName, String email, String phoneNumber, LocalDate hireDate, String jobTitle, int departmentId) {
-        this.id = id;
+    public Employee(int employeeid, String firstName, String lastName, String email, String phoneNumber, LocalDate hireDate, String jobTitle, int departmentId) {
+        this.employeeid = employeeid;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -21,11 +21,11 @@ public class Employee {
     }
 
     public int getId() {
-        return id;
+        return employeeid;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.employeeid = employeeid;
     }
 
     public String getFirstName() {
