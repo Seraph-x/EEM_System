@@ -7,7 +7,22 @@ public class TimeOffRequestDAO {
     public TimeOffRequestDAO(Connection connection) {
         this.connection = connection;
     }
-
+    public TimeOffRequest getRequestByEmployeeId(int employeeId) throws SQLException {
+        String sql = "SELECT * FROM timeoffrequests WHERE EmployeeID = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, employeeId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    LocalDate startDate = resultSet.getDate("startdate").toLocalDate();
+                    LocalDate endDate = resultSet.getDate("enddate").toLocalDate();
+                    String requeststatus = resultSet.getString("requeststatus");
+                    return new TimeOffRequest(employeeId, startDate, endDate, requeststatus);
+                } else {
+                    return null;
+                }
+            }
+        }
+    }
     public void addTimeOffRequest(TimeOffRequest timeOffRequest) throws SQLException {
         String sql = "INSERT INTO TimeOffRequests (EmployeeID, StartDate, EndDate, RequestStatus) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {

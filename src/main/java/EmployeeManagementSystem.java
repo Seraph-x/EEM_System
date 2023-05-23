@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -144,9 +145,102 @@ public class EmployeeManagementSystem {
                                 salaryToUpdate.setBaseSalary(Integer.parseInt(updatedBaseSalary));
                             }
                             System.out.print("Enter bonus (" + salaryToUpdate.getBonus() + ")");
-
-
+                            String updatedBonus = scanner.nextLine();
+                            if (!updatedBonus.isEmpty()) {
+                                salaryToUpdate.setBonus(Integer.parseInt(updatedBonus));
+                            }
+                            salaryDAO.updateSalary(salaryToUpdate);
+                            System.out.println("Salary updated successfully");
                         }
+                        break;
+                    case 7:
+                        System.out.print("Enter Employee ID: ");
+                        int SalaryIdToDelete = scanner.nextInt();
+                        scanner.nextLine();
+                        salaryDAO.deleteSalary(SalaryIdToDelete);
+                        System.out.println("Salary deleted successfully");
+                        break;
+                    case 8:
+                        List<Salary> salaries = new ArrayList<>();
+                        String sql = "SELECT * FROM salaries";
+                        try (Statement statement = connection.createStatement();
+                             ResultSet resultSet = statement.executeQuery(sql)){
+                            while (resultSet.next()){
+                                int EmployeeId = resultSet.getInt("EmployeeId");
+                                int BaseSalary = resultSet.getInt("BaseSalary");
+                                int Bonus = resultSet.getInt("Bonus");
+                                LocalDate EffectiveDate = resultSet.getDate("EffectiveDate").toLocalDate();
+                                Salary s = new Salary(EmployeeId,BaseSalary,Bonus,EffectiveDate);
+                                salaries.add(s);
+                            }
+                        }
+                        for (Salary s : salaries) {
+                            System.out.println(s.getEmployeeId() + " " + s.getBaseSalary() + " " + s.getBonus() + " " + s.getEffectiveDate());
+                        }
+                        break;
+                    case 9:
+                        System.out.print("Enter employee ID: ");
+                        int TemployeeId = scanner.nextInt();
+                        scanner.nextLine();
+                        System.out.print("Enter start date(yyyy-mm-dd): ");
+                        LocalDate startDate = LocalDate.parse(scanner.nextLine());
+                        System.out.print("Enter end date(yyyy-mm-dd): ");
+                        LocalDate endDate = LocalDate.parse(scanner.nextLine());
+                        System.out.print("Enter request status: ");
+                        String requestStatus = scanner.nextLine();
+                        TimeOffRequest timeOffRequest = new TimeOffRequest(TemployeeId, startDate, endDate, requestStatus);
+                        timeOffRequestDAO.addTimeOffRequest(timeOffRequest);
+                        System.out.println("Time_off_request added successfully");
+                        break;
+                    case 10:
+                        System.out.print("Enter employee ID: ");
+                        int TemployeeIdToUpdate = scanner.nextInt();
+                        scanner.nextLine();
+                        TimeOffRequest timeoffrequestToUpdate = timeOffRequestDAO.getRequestByEmployeeId(TemployeeIdToUpdate);
+                        if (timeoffrequestToUpdate == null) {
+                            System.out.println("Requset not found");
+                        } else {
+                            System.out.print("Enter start date (" + timeoffrequestToUpdate.getStartDate() + "): ");
+                            String updatedStartdate = scanner.nextLine();
+                            if (!updatedStartdate.isEmpty()) {
+                                timeoffrequestToUpdate.setStartDate(LocalDate.parse(updatedStartdate));
+                            }
+                            System.out.print("Enter end date (" + timeoffrequestToUpdate.getEndDate() + "): ");
+                            String updatedEnddate = scanner.nextLine();
+                            if (!updatedEnddate.isEmpty()) {
+                                timeoffrequestToUpdate.setEndDate(LocalDate.parse(updatedEnddate));
+                            }
+                            timeOffRequestDAO.updateTimeOffRequest(timeoffrequestToUpdate);
+                            System.out.println("Time off request updated successfully");
+                        }
+                        break;
+                    case 11:
+                        System.out.print("Enter Employee ID: ");
+                        int RequestIdToDelete = scanner.nextInt();
+                        scanner.nextLine();
+                        timeOffRequestDAO.deleteTimeOffRequest(RequestIdToDelete);
+                        System.out.println("Time off request deleted successfully");
+                        break;
+                    case 12:
+                        List<TimeOffRequest> timeOffRequests = new ArrayList<>();
+                        String Tsql = "SELECT * FROM timeoffrequests";
+                        try (Statement statement = connection.createStatement();
+                             ResultSet resultSet = statement.executeQuery(Tsql)){
+                            while (resultSet.next()){
+                                int EmployeeId = resultSet.getInt("EmployeeId");
+                                LocalDate StartDate = resultSet.getDate("Startdate").toLocalDate();
+                                LocalDate EndDate = resultSet.getDate("Enddate").toLocalDate();
+                                String Request = resultSet.getString("requestStatus");
+                                TimeOffRequest t = new TimeOffRequest(EmployeeId,StartDate,EndDate,Request);
+                                timeOffRequests.add(t);
+                            }
+                        }
+                        for (TimeOffRequest t : timeOffRequests) {
+                            System.out.println(t.getEmployeeId() + " " + t.getStartDate() + " " + t.getEndDate() + " " + t.getRequestStatus());
+                        }
+                        break;
+                    case 0:
+                        System.exit(0);
                 }
             }
         }
