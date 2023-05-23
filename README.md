@@ -32,6 +32,7 @@
 
 ### SQL(based on openGauss)
 > * -- 创建 Employees 表
+> 
 CREATE TABLE Employees (
     EmployeeID SERIAL PRIMARY KEY,
     FirstName VARCHAR(50) NOT NULL,
@@ -44,6 +45,7 @@ CREATE TABLE Employees (
 );
 
 > * -- 创建 Departments 表
+> 
 CREATE TABLE Departments (
     DepartmentID SERIAL PRIMARY KEY,
     DepartmentName VARCHAR(100) NOT NULL,
@@ -51,14 +53,17 @@ CREATE TABLE Departments (
 );
 
 > * -- 在 Employees 表中添加 DepartmentID 外键约束
+> 
 ALTER TABLE Employees
 ADD FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID);
 
 >  * -- 在 Departments 表中添加 ManagerID 外键约束
+>  
 ALTER TABLE Departments
 ADD FOREIGN KEY (ManagerID) REFERENCES Employees(EmployeeID);
 
 > * -- 创建 Salaries 表
+> 
 CREATE TABLE Salaries (
     SalaryID SERIAL PRIMARY KEY,
     EmployeeID INTEGER NOT NULL,
@@ -69,6 +74,7 @@ CREATE TABLE Salaries (
 );
 
 > * -- 创建 TimeOffRequests 表
+> 
 CREATE TABLE TimeOffRequests (
     RequestID SERIAL PRIMARY KEY,
     EmployeeID INTEGER NOT NULL,
